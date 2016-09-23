@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentacion", "Presentacion\Presentacion.csproj", "{E3EA660F-A48A-49C5-BBF4-2E0529D733C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logica", "Logica\Logica.csproj", "{C9BBBDE1-621E-40CE-9B69-9858F015FA5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAO", "DAO\DAO.csproj", "{B42431FF-87D9-4EC4-B03C-1033581D2526}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E3EA660F-A48A-49C5-BBF4-2E0529D733C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3EA660F-A48A-49C5-BBF4-2E0529D733C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3EA660F-A48A-49C5-BBF4-2E0529D733C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3EA660F-A48A-49C5-BBF4-2E0529D733C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9BBBDE1-621E-40CE-9B69-9858F015FA5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9BBBDE1-621E-40CE-9B69-9858F015FA5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9BBBDE1-621E-40CE-9B69-9858F015FA5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9BBBDE1-621E-40CE-9B69-9858F015FA5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B42431FF-87D9-4EC4-B03C-1033581D2526}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B42431FF-87D9-4EC4-B03C-1033581D2526}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B42431FF-87D9-4EC4-B03C-1033581D2526}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B42431FF-87D9-4EC4-B03C-1033581D2526}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

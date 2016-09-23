@@ -1,0 +1,6 @@
+c:\users\alexander mayorga\documents\visual studio 2012\Projects\RelojApp\DAO\bin\Debug\DAO.dll
+c:\users\alexander mayorga\documents\visual studio 2012\Projects\RelojApp\DAO\bin\Debug\DAO.pdb
+c:\users\alexander mayorga\documents\visual studio 2012\Projects\RelojApp\DAO\bin\Debug\MySql.Data.dll
+c:\users\alexander mayorga\documents\visual studio 2012\Projects\RelojApp\DAO\obj\Debug\DAO.dll
+c:\users\alexander mayorga\documents\visual studio 2012\Projects\RelojApp\DAO\obj\Debug\DAO.pdb
+C:\Users\Alexander Mayorga\documents\visual studio 2012\Projects\RelojApp\DAO\obj\Debug\DAO.csprojResolveAssemblyReference.cache
