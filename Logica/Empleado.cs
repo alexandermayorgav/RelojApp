@@ -6,17 +6,23 @@ using System.Threading.Tasks;
 using SourceAFIS.Simple;
 using DAO;
 using MySql.Data.MySqlClient;
+using System.ComponentModel;
 namespace Logica
 {
     [Serializable]
     public    class Empleado :Person
     {
+        [Browsable(false)]
         public int EmpleadoID { get; set; }
+        [DisplayName("Nombre")]
         public String Nombres { get; set; }
+        [DisplayName("Apellido Paterno")]
         public String ApellidoPat { get; set; }
+        [DisplayName("Apellido Materno")]
         public String ApellidoMat { get; set; }
+        [DisplayName("CURP")]
         public String CURP { get; set; }
-
+        [NonSerialized]
         private ClsMySQL oMySql;
 
         public Empleado()
@@ -24,20 +30,22 @@ namespace Logica
             this.oMySql = new ClsMySQL();
         }
 
-        public void insertar()
+        private void insertar()
         {
             MySqlTransaction trans = null;
             try
             {
                 this.oMySql.abrirConexion();
                 trans = this.oMySql.connection.BeginTransaction(); 
-                MySqlCommand cmd = new MySqlCommand("INSERT INTO empleado(nombre, apellidoPat, apellidoMat,CURP) VALUES(@nombre,@apellidoPat,@apellidoMat, @CURP)", this.oMySql.connection,trans);
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO empleado(nombres, apellidoPat, apellidoMat,CURP) VALUES(@nombre,@apellidoPat,@apellidoMat, @CURP)", this.oMySql.connection);
                 cmd.Parameters.AddWithValue("@nombre", this.Nombres);
                 cmd.Parameters.AddWithValue("@apellidoPat", this.ApellidoPat);
-                cmd.Parameters.AddWithValue("@apellidoMay", this.ApellidoMat);
+                cmd.Parameters.AddWithValue("@apellidoMat", this.ApellidoMat);
                 cmd.Parameters.AddWithValue("@CURP", this.CURP);
-                cmd.Transaction = trans;
-                this.EmpleadoID = (int)cmd.ExecuteScalar();
+               // cmd.Transaction = trans;
+            //    cmd.CommandTimeout = 0;
+                cmd.ExecuteNonQuery();
+                this.EmpleadoID =Convert.ToInt32( cmd.LastInsertedId);
                 foreach (Huella huella in this.Fingerprints)
                 {
                     insertarHuella(huella,this.EmpleadoID, trans);
@@ -45,9 +53,10 @@ namespace Logica
                 trans.Commit();
                 
             }
-            catch (Exception e)
+            catch (MySqlException e)
             {
                 trans.Rollback();
+                this.oMySql.setError("Error al insertar en la tabla empleado", e.Message + "\r\n" + e.StackTrace);
             }
             finally { this.oMySql.cerrarConexion(); }
         
@@ -65,16 +74,17 @@ namespace Logica
             cmd.ExecuteNonQuery();
         }
 
-        public void actualizar()
+        private void actualizar()
         { 
         
         }
-        public void guardar()
+        public bool guardar()
         {
             if (this.EmpleadoID == 0)
                 insertar();
             else
                 actualizar();
+            return  this.oMySql.getError();
         }
         /// <summary>
         /// Obtiene los empleados registrados
@@ -95,15 +105,17 @@ namespace Logica
                 {
                     empleado = new Empleado()
                     {
-                        EmpleadoID = reader.GetInt32("EmpleadoID"),
+                        EmpleadoID = reader.GetInt32("idEmpleado"),
                         Nombres = reader.GetString("Nombres"),
                         ApellidoPat = reader.GetString("ApellidoPat"),
                         ApellidoMat = reader.GetString("ApellidoMat"),
                         CURP =  reader.GetString("CURP")
                     };
-                    getHuellasByIdEmpleado(ref empleado);
+                    //getHuellasByIdEmpleado(ref empleado);
                     lstDatos.Add(empleado);
                 }
+                reader.Close();
+                lstDatos.ForEach(item => getHuellasByIdEmpleado(ref item));
 
             }
             catch (Exception e)
@@ -130,11 +142,12 @@ namespace Logica
                     huella = new Huella()
                     {
                         idHuella = reader.GetInt32("idempleadoBiometrico"),
-                        ruta = reader.GetString("rutaArchivo"),
+                        ruta = reader.GetString("ruta"),
                         dedo = (Huella.Dedo)reader.GetInt32("idBiometrico")
                     };
                     empleado.Fingerprints.Add(huella);
                 }
+                reader.Close();
             }
             catch (Exception e)
             { 

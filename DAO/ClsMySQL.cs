@@ -7,7 +7,8 @@ using MySql.Data.MySqlClient;
 
 namespace DAO
 {
-    public class ClsMySQL
+[Serializable]
+    public class ClsMySQL:ClsBase
     {
         public MySqlConnection connection { get; set; } 
         private string server;
@@ -39,10 +40,7 @@ namespace DAO
             this.connection.BeginTransaction();
         }
 
-        public void confirmarTransaccion()
-        {
-            
-        }
+        
 
         public void abrirConexion()
         {

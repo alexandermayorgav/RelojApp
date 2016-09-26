@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SourceAFIS.Simple;
 using System.Windows.Media.Imaging;
+
 namespace Logica
 {
     public class ClsIdentificacion
@@ -12,13 +13,13 @@ namespace Logica
         private AfisEngine afis;
         private List<Empleado> lstEmpleados { get; set; }
         public float score { get; set; }
-        public ClsIdentificacion(List<Empleado> lstEmpleados)
+        public ClsIdentificacion(ref List<Empleado> lstEmpleados)
         {
             this.afis = new AfisEngine();
-            this.afis.Threshold = 50;//default 25
+            this.afis.Threshold = 30;//default 25
             this.lstEmpleados = lstEmpleados;
         }
-        public void crearDataBase(List<Empleado> lstEmpleados)
+        public void crearDataBase()
         {
             lstEmpleados.ForEach(empleado => empleado.Fingerprints.ForEach(huella => huella.AsBitmapSource = getBitmapSource(((Huella)huella).ruta)));
             lstEmpleados.ForEach(empleado => this.afis.Extract(empleado));

@@ -15,29 +15,61 @@ namespace Logica
         UFScannerManager ScannerManager;
         public UFScanner scanner { get; set; }
 
+        public bool verificarEstado()
+        {
+            return this.scanner.IsSensorOn;
+        }
+        public bool verificarDedo()
+        {
+            if (this.scanner !=null)
+            {
+                return this.scanner.IsFingerOn;    
+            }
+            return false;
+        }
 
-        public void iniciarScanner()
+        public bool iniciarScanner()
         {
             this.ScannerManager = new UFScannerManager(this);
+            
             this.ufs_res = this.ScannerManager.Init();
             //get firts scanner
             this.scanner = this.ScannerManager.Scanners[0];
+            if (this.scanner ==null)
+            {
+                MessageBox.Show("Escanner no encontrado", "AVISO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
             setParametros();
+            return true;
         }
 
         public ClsRetorno getImage(String ruta, Huella.Dedo tipoDedo)
         {
-            byte[] template = new byte[MAX_TEMPLATE_SIZE];
-            int templateSize;
-            int enrollQuallity;
+            if (this.scanner == null)
+            {
+                MessageBox.Show("Escanner no encontrado", "AVISO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+            if (!this.scanner.IsSensorOn)
+            {
+                MessageBox.Show("Escanner desconectado", "AVISO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //this.Dispose();
+                return null;
+            }
 
-            this.ufs_res = this.scanner.ClearCaptureImageBuffer();
-            this.ufs_res = this.scanner.CaptureSingleImage();
-            this.ufs_res = this.scanner.Extract(template, out templateSize, out enrollQuallity);
+                byte[] template = new byte[MAX_TEMPLATE_SIZE];
+                int templateSize;
+                int enrollQuallity;
 
-            ruta += "_" + ((int)tipoDedo).ToString() + ".bmp";
-            this.ufs_res = this.scanner.SaveCaptureImageBufferToBMP(ruta);
-            return new ClsRetorno(enrollQuallity, ruta, template);
+                this.ufs_res = this.scanner.ClearCaptureImageBuffer();
+                this.ufs_res = this.scanner.CaptureSingleImage();
+                this.ufs_res = this.scanner.Extract(template, out templateSize, out enrollQuallity);
+
+                ruta += "_" + ((int)tipoDedo).ToString() + ".bmp";
+                this.ufs_res = this.scanner.SaveCaptureImageBufferToBMP(ruta);
+                return new ClsRetorno(enrollQuallity, ruta, template);
+            
         }
 
         private void setParametros()

@@ -35,10 +35,12 @@
             this.txtApellidoPat = new System.Windows.Forms.TextBox();
             this.txtApellidoMat = new System.Windows.Forms.TextBox();
             this.gridDatos = new System.Windows.Forms.DataGridView();
+            this.Dedo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Ruta = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.cmbDedos = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.btnAgregarHuella = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.cmbDedos = new System.Windows.Forms.ComboBox();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.txtCURP = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -99,11 +101,30 @@
             // 
             // gridDatos
             // 
+            this.gridDatos.AllowUserToAddRows = false;
+            this.gridDatos.AllowUserToDeleteRows = false;
             this.gridDatos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridDatos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Dedo,
+            this.Ruta});
             this.gridDatos.Location = new System.Drawing.Point(16, 57);
             this.gridDatos.Name = "gridDatos";
+            this.gridDatos.ReadOnly = true;
             this.gridDatos.Size = new System.Drawing.Size(214, 165);
             this.gridDatos.TabIndex = 6;
+            // 
+            // Dedo
+            // 
+            this.Dedo.HeaderText = "Dedo";
+            this.Dedo.Name = "Dedo";
+            this.Dedo.ReadOnly = true;
+            // 
+            // Ruta
+            // 
+            this.Ruta.HeaderText = "Ruta";
+            this.Ruta.Name = "Ruta";
+            this.Ruta.ReadOnly = true;
+            this.Ruta.Visible = false;
             // 
             // groupBox1
             // 
@@ -118,15 +139,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Registro de Huellas";
             // 
-            // cmbDedos
+            // btnAgregarHuella
             // 
-            this.cmbDedos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDedos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.cmbDedos.FormattingEnabled = true;
-            this.cmbDedos.Location = new System.Drawing.Point(55, 19);
-            this.cmbDedos.Name = "cmbDedos";
-            this.cmbDedos.Size = new System.Drawing.Size(175, 21);
-            this.cmbDedos.TabIndex = 8;
+            this.btnAgregarHuella.Location = new System.Drawing.Point(236, 17);
+            this.btnAgregarHuella.Name = "btnAgregarHuella";
+            this.btnAgregarHuella.Size = new System.Drawing.Size(75, 23);
+            this.btnAgregarHuella.TabIndex = 8;
+            this.btnAgregarHuella.Text = "Agregar";
+            this.btnAgregarHuella.UseVisualStyleBackColor = true;
+            this.btnAgregarHuella.Click += new System.EventHandler(this.btnAgregarHuella_Click);
             // 
             // label4
             // 
@@ -137,22 +158,22 @@
             this.label4.TabIndex = 9;
             this.label4.Text = "Dedo";
             // 
-            // btnAgregarHuella
+            // cmbDedos
             // 
-            this.btnAgregarHuella.Location = new System.Drawing.Point(236, 17);
-            this.btnAgregarHuella.Name = "btnAgregarHuella";
-            this.btnAgregarHuella.Size = new System.Drawing.Size(75, 23);
-            this.btnAgregarHuella.TabIndex = 10;
-            this.btnAgregarHuella.Text = "Agregar";
-            this.btnAgregarHuella.UseVisualStyleBackColor = true;
-            this.btnAgregarHuella.Click += new System.EventHandler(this.btnAgregarHuella_Click);
+            this.cmbDedos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDedos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.cmbDedos.FormattingEnabled = true;
+            this.cmbDedos.Location = new System.Drawing.Point(55, 19);
+            this.cmbDedos.Name = "cmbDedos";
+            this.cmbDedos.Size = new System.Drawing.Size(175, 21);
+            this.cmbDedos.TabIndex = 7;
             // 
             // btnGuardar
             // 
             this.btnGuardar.Location = new System.Drawing.Point(290, 371);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(75, 23);
-            this.btnGuardar.TabIndex = 11;
+            this.btnGuardar.TabIndex = 9;
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
@@ -163,7 +184,7 @@
             this.txtCURP.MaxLength = 18;
             this.txtCURP.Name = "txtCURP";
             this.txtCURP.Size = new System.Drawing.Size(245, 20);
-            this.txtCURP.TabIndex = 13;
+            this.txtCURP.TabIndex = 6;
             // 
             // label5
             // 
@@ -191,6 +212,7 @@
             this.Controls.Add(this.label1);
             this.Name = "frmRegistroEmpleado";
             this.Text = "Registro de Empleados";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmRegistroEmpleado_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.gridDatos)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -215,5 +237,7 @@
         private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.TextBox txtCURP;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Dedo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Ruta;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Speech.Synthesis;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,7 +17,20 @@ namespace Presentacion
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmRegistroEmpleado());
+            Application.Run(new MDIPrincipal());
+           // getVoces();
+        }
+
+        private static void getVoces()
+        {
+            SpeechSynthesizer synth = new SpeechSynthesizer();
+            //synth.SelectVoice
+            synth.Speak("Acceso correcto ");
+            foreach (InstalledVoice voice in synth.GetInstalledVoices())
+            {
+                VoiceInfo info = voice.VoiceInfo;
+                Console.WriteLine(" Voice Name: " + info.Name);
+            }
         }
     }
 }
