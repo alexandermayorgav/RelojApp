@@ -40,6 +40,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Speech" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -69,6 +71,12 @@
     <Compile Include="frmVerEmpleados.Designer.cs">
       <DependentUpon>frmVerEmpleados.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmVerRegistros.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVerRegistros.Designer.cs">
+      <DependentUpon>frmVerRegistros.cs</DependentUpon>
+    </Compile>
     <Compile Include="MDIPrincipal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +94,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmVerEmpleados.resx">
       <DependentUpon>frmVerEmpleados.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVerRegistros.resx">
+      <DependentUpon>frmVerRegistros.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MDIPrincipal.resx">
       <DependentUpon>MDIPrincipal.cs</DependentUpon>

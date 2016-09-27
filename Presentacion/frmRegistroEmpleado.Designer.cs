@@ -211,6 +211,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "frmRegistroEmpleado";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Registro de Empleados";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmRegistroEmpleado_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.gridDatos)).EndInit();

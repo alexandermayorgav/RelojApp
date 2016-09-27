@@ -9,11 +9,12 @@ namespace Logica
     [Serializable]
     public class Huella : Fingerprint
     {
-        public Huella(int idHuella, String ruta, Dedo dedo)
+        public Huella(int idHuella, String ruta, Dedo dedo, Estatus estatus = Estatus.nueva)
         {
             this.idHuella = idHuella;
             this.ruta = ruta;
             this.dedo = dedo;
+            this.estatus = estatus;
         }
         public Huella()
         { 
@@ -41,6 +42,6 @@ namespace Logica
             Der_Pulgar = 10
 
         }
-        public enum Estatus { activa,baja}
+        public enum Estatus { nueva,actualizada,activa,baja}
     }
 }

@@ -41,6 +41,7 @@
             this.gridDatos.Name = "gridDatos";
             this.gridDatos.Size = new System.Drawing.Size(736, 336);
             this.gridDatos.TabIndex = 0;
+            this.gridDatos.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridDatos_CellDoubleClick);
             // 
             // label1
             // 

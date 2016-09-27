@@ -16,12 +16,15 @@ namespace Presentacion
         private Logica.Empleado oEmpleado;
         private ClsEscanner oEscanner;
         private List<Logica.Empleado> lstEmpleados;
+
         /// <summary>
         /// Captura una imagen de una huella 
         /// </summary>
         private void getImage()
         {
             Huella.Dedo tipoDedo;
+            Huella.Estatus estatus =Huella.Estatus.nueva;
+            
             Enum.TryParse<Huella.Dedo>(this.cmbDedos.SelectedValue.ToString(), out tipoDedo);
 
             if (this.oEmpleado.Fingerprints.Count(item => ((Huella)item).dedo == tipoDedo) != 0)
@@ -29,9 +32,13 @@ namespace Presentacion
                 if (MessageBox.Show("El usuario ya cuenta con un registro para el dedo seleccionado,¿Desea capturarlo nuevamente?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.No)
                     return;
                 else
-                    this.oEmpleado.Fingerprints.Remove(this.oEmpleado.Fingerprints.Where(huella => ((Huella)huella).dedo == tipoDedo).FirstOrDefault());
-            }
+                {
 
+                    this.oEmpleado.Fingerprints.Where(item => ((Huella)item).dedo == tipoDedo).Select(item => ((Huella)item).estatus = Huella.Estatus.baja);
+                    //this.oEmpleado.Fingerprints.Remove(this.oEmpleado.Fingerprints.Where(huella => ((Huella)huella).dedo == tipoDedo).FirstOrDefault()); 
+                }
+            }
+            
             ClsRetorno oRetorno = this.oEscanner.getImage(Sesion.getRuta() + "\\" + txtCURP.Text.Trim(), tipoDedo);
             if (oRetorno == null)
                 return;
@@ -41,9 +48,10 @@ namespace Presentacion
                 MessageBox.Show("La calidad de la captura es inferior a la aceptada, repita la captura");
                 return;
             }
-            this.oEmpleado.Fingerprints.Add(new Huella(this.oEmpleado.Fingerprints.Count + 1, oRetorno.ruta, tipoDedo));
+            this.oEmpleado.Fingerprints.Add(new Huella(this.oEmpleado.Fingerprints.Count + 1, oRetorno.ruta, tipoDedo, estatus ));
             fillGridView();
         }
+
         /// <summary>
         /// Muestra las huellas registradas de un empleado
         /// </summary>
@@ -51,7 +59,7 @@ namespace Presentacion
         {
             this.gridDatos.Rows.Clear();
             int row = 0;
-            foreach (Huella huella in this.oEmpleado.Fingerprints)
+            foreach (Huella huella in this.oEmpleado.Fingerprints.Where(item =>((Huella)item).estatus != Huella.Estatus.baja))
             {
                 this.gridDatos.Rows.Add();
                 this.gridDatos.Rows[row].Cells[0].Value = huella.dedo;
@@ -62,14 +70,20 @@ namespace Presentacion
         /// <summary>
         /// Constructor
         /// </summary>
-        public frmRegistroEmpleado()
+        public frmRegistroEmpleado(Empleado oEmpleado = null)
         {
             InitializeComponent();
             this.oEscanner = new ClsEscanner();
             this.oEscanner.iniciarScanner();
             this.cmbDedos.DataSource = Enum.GetValues(typeof(Huella.Dedo));
             this.cmbDedos.SelectedIndex = 0;
-            this.oEmpleado =  new Logica.Empleado();
+            if (oEmpleado == null)
+                this.oEmpleado = new Empleado();
+            else
+            {
+                this.oEmpleado = oEmpleado;
+                fillGridView();
+            }
             this.lstEmpleados = new List<Logica.Empleado>();
             setBinding();
         }

@@ -18,3 +18,4 @@ C:\Users\Alexander Mayorga\documents\visual studio 2012\Projects\RelojApp\Presen
 C:\Users\Alexander Mayorga\documents\visual studio 2012\Projects\RelojApp\Presentacion\obj\Debug\Presentacion.csproj.GenerateResource.Cache
 C:\Users\Alexander Mayorga\documents\visual studio 2012\Projects\RelojApp\Presentacion\obj\Debug\Presentacion.exe
 C:\Users\Alexander Mayorga\documents\visual studio 2012\Projects\RelojApp\Presentacion\obj\Debug\Presentacion.pdb
+C:\Users\Alexander Mayorga\Documents\Visual Studio 2012\Projects\RelojApp\Presentacion\obj\Debug\Presentacion.frmVerRegistros.resources

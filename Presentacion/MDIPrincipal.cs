@@ -157,5 +157,12 @@ namespace Presentacion
             form.MdiParent = this;
             form.Show();
         }
+
+        private void verRegistrosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmVerRegistros form = new frmVerRegistros();
+            form.MdiParent = this;
+            form.Show();
+        }
     }
 }

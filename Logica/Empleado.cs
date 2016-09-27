@@ -13,7 +13,7 @@ namespace Logica
     public    class Empleado :Person
     {
         [Browsable(false)]
-        public int EmpleadoID { get; set; }
+        public int IdEmpleado { get; set; }
         [DisplayName("Nombre")]
         public String Nombres { get; set; }
         [DisplayName("Apellido Paterno")]
@@ -25,6 +25,10 @@ namespace Logica
         [NonSerialized]
         private ClsMySQL oMySql;
 
+        public String getNombreCompleto()
+        {
+            return this.Nombres.ToUpper() + " " + this.ApellidoPat.ToUpper() + " " + this.ApellidoMat.ToUpper(); 
+        }
         public Empleado()
         {
             this.oMySql = new ClsMySQL();
@@ -45,10 +49,10 @@ namespace Logica
                // cmd.Transaction = trans;
             //    cmd.CommandTimeout = 0;
                 cmd.ExecuteNonQuery();
-                this.EmpleadoID =Convert.ToInt32( cmd.LastInsertedId);
+                this.IdEmpleado =Convert.ToInt32( cmd.LastInsertedId);
                 foreach (Huella huella in this.Fingerprints)
                 {
-                    insertarHuella(huella,this.EmpleadoID, trans);
+                    insertarHuella(huella,this.IdEmpleado, trans);
                 }
                 trans.Commit();
                 
@@ -74,13 +78,54 @@ namespace Logica
             cmd.ExecuteNonQuery();
         }
 
-        private void actualizar()
-        { 
+        private void eliminarHuella(Huella huella, MySqlTransaction trans)
+        {
+            MySqlCommand cmd = new MySqlCommand("DELETE empleadobiometrico WHERE idempleadobiometrico = @idempleadobiometrico", this.oMySql.connection, trans);
+            cmd.Parameters.AddWithValue("@idempleadobiometrico", huella.idHuella);
+            cmd.ExecuteNonQuery();
+        }
+
         
+        private void actualizar()
+        {
+            MySqlTransaction trans = null;
+            try
+            {
+                this.oMySql.abrirConexion();
+                trans = this.oMySql.connection.BeginTransaction();
+                MySqlCommand cmd = new MySqlCommand("UPDATE empleado SET nombres = @nombre, apellidoPat = @apellidoPat, apellidoMat = @apellidoMat,CURP = @CURP WHERE idEmpleado = @idEmpleado", this.oMySql.connection);
+                cmd.Parameters.AddWithValue("@nombre", this.Nombres);
+                cmd.Parameters.AddWithValue("@apellidoPat", this.ApellidoPat);
+                cmd.Parameters.AddWithValue("@apellidoMat", this.ApellidoMat);
+                cmd.Parameters.AddWithValue("@CURP", this.CURP);
+                cmd.Parameters.AddWithValue("@idEmpleado", this.IdEmpleado);
+                // cmd.Transaction = trans;
+                //    cmd.CommandTimeout = 0;
+                cmd.ExecuteNonQuery();
+                this.IdEmpleado = Convert.ToInt32(cmd.LastInsertedId);
+                foreach (Huella huella in this.Fingerprints.Where(item => ((Huella)item).estatus == Huella.Estatus.nueva))
+                {
+                    insertarHuella(huella, this.IdEmpleado, trans);
+                }
+                List<String> lstArchivos = new List<string>();
+                foreach (Huella huella in this.Fingerprints.Where(item => ((Huella)item).estatus == Huella.Estatus.baja & ((Huella)item).idHuella !=0 ))
+                {
+                    eliminarHuella(huella, trans);
+                    lstArchivos.Add(huella.ruta);
+                }
+                trans.Commit();
+
+            }
+            catch (MySqlException e)
+            {
+                trans.Rollback();
+                this.oMySql.setError("Error al insertar en la tabla empleado", e.Message + "\r\n" + e.StackTrace);
+            }
+            finally { this.oMySql.cerrarConexion(); }
         }
         public bool guardar()
         {
-            if (this.EmpleadoID == 0)
+            if (this.IdEmpleado == 0)
                 insertar();
             else
                 actualizar();
@@ -105,7 +150,7 @@ namespace Logica
                 {
                     empleado = new Empleado()
                     {
-                        EmpleadoID = reader.GetInt32("idEmpleado"),
+                        IdEmpleado = reader.GetInt32("idEmpleado"),
                         Nombres = reader.GetString("Nombres"),
                         ApellidoPat = reader.GetString("ApellidoPat"),
                         ApellidoMat = reader.GetString("ApellidoMat"),
@@ -134,7 +179,7 @@ namespace Logica
         {
             try
             {
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM empleadobiometrico WHERE idEmpleado = " + empleado.EmpleadoID.ToString(), this.oMySql.connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM empleadobiometrico WHERE idEmpleado = " + empleado.IdEmpleado.ToString(), this.oMySql.connection);
                 MySqlDataReader reader = cmd.ExecuteReader();
                 Huella huella;
                 while (reader.Read())
@@ -143,7 +188,8 @@ namespace Logica
                     {
                         idHuella = reader.GetInt32("idempleadoBiometrico"),
                         ruta = reader.GetString("ruta"),
-                        dedo = (Huella.Dedo)reader.GetInt32("idBiometrico")
+                        dedo = (Huella.Dedo)reader.GetInt32("idBiometrico"),
+                        estatus = Huella.Estatus.activa
                     };
                     empleado.Fingerprints.Add(huella);
                 }

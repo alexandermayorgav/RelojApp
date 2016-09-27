@@ -59,13 +59,24 @@ namespace Presentacion
                 //MessageBox.Show("Bienvenido " + empleadoIdentificado.Nombres + "\r\nSimilitud: " + score);
                 darBienvenida();
                 lblMensaje.Text = empleadoIdentificado.Nombres + " " + empleadoIdentificado.ApellidoPat;
-                new Registro() { 
-                    idEmpleado =  empleadoIdentificado.EmpleadoID
+                new Registro()
+                {
+                    empleado = new Empleado() { IdEmpleado = empleadoIdentificado.IdEmpleado,
+                    }
                 }.insertar();
 
             }
             else
                 lblMensaje.Text = "Empleado no encontrado";
+            eliminarArchivo(oRetorno.ruta);
+        }
+
+        private void eliminarArchivo(String ruta)
+        {
+            if (System.IO.File.Exists(ruta))
+            {
+                System.IO.File.Delete(ruta);
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)

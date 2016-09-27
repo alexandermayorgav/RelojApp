@@ -27,6 +27,15 @@ namespace Presentacion
             this.gridDatos.DataSource = this.lstEmpleados.Where(item => item.Nombres.ToLower().Contains(texto) | item.ApellidoPat.ToLower().Contains(texto) | item.ApellidoMat.ToLower().Contains(texto)).ToList();
         }
 
+        private void gridDatos_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Empleado oEmpleado = this.gridDatos.CurrentRow.DataBoundItem as Empleado;
+            if (oEmpleado == null)
+                return;
+            frmRegistroEmpleado form = new frmRegistroEmpleado(oEmpleado);
+            form.ShowDialog();
+        }
+
        
     }
 }
