@@ -39,6 +39,7 @@ namespace Logica
             MySqlTransaction trans = null;
             try
             {
+                
                 this.oMySql.abrirConexion();
                 trans = this.oMySql.connection.BeginTransaction(); 
                 MySqlCommand cmd = new MySqlCommand("INSERT INTO empleado(nombres, apellidoPat, apellidoMat,CURP) VALUES(@nombre,@apellidoPat,@apellidoMat, @CURP)", this.oMySql.connection);
@@ -80,7 +81,7 @@ namespace Logica
 
         private void eliminarHuella(Huella huella, MySqlTransaction trans)
         {
-            MySqlCommand cmd = new MySqlCommand("DELETE empleadobiometrico WHERE idempleadobiometrico = @idempleadobiometrico", this.oMySql.connection, trans);
+            MySqlCommand cmd = new MySqlCommand("DELETE FROM empleadobiometrico WHERE idempleadobiometrico = @idempleadobiometrico", this.oMySql.connection, trans);
             cmd.Parameters.AddWithValue("@idempleadobiometrico", huella.idHuella);
             cmd.ExecuteNonQuery();
         }
@@ -91,6 +92,8 @@ namespace Logica
             MySqlTransaction trans = null;
             try
             {
+                if (this.oMySql == null)
+                    this.oMySql = new ClsMySQL();
                 this.oMySql.abrirConexion();
                 trans = this.oMySql.connection.BeginTransaction();
                 MySqlCommand cmd = new MySqlCommand("UPDATE empleado SET nombres = @nombre, apellidoPat = @apellidoPat, apellidoMat = @apellidoMat,CURP = @CURP WHERE idEmpleado = @idEmpleado", this.oMySql.connection);
@@ -102,7 +105,7 @@ namespace Logica
                 // cmd.Transaction = trans;
                 //    cmd.CommandTimeout = 0;
                 cmd.ExecuteNonQuery();
-                this.IdEmpleado = Convert.ToInt32(cmd.LastInsertedId);
+                //this.IdEmpleado = Convert.ToInt32(cmd.LastInsertedId);
                 foreach (Huella huella in this.Fingerprints.Where(item => ((Huella)item).estatus == Huella.Estatus.nueva))
                 {
                     insertarHuella(huella, this.IdEmpleado, trans);

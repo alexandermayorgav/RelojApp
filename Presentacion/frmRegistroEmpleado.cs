@@ -34,7 +34,7 @@ namespace Presentacion
                 else
                 {
 
-                    this.oEmpleado.Fingerprints.Where(item => ((Huella)item).dedo == tipoDedo).Select(item => ((Huella)item).estatus = Huella.Estatus.baja);
+                    this.oEmpleado.Fingerprints.Where(item => ((Huella)item).dedo == tipoDedo).ToList().ForEach(item => ((Huella)item).estatus = Huella.Estatus.baja);
                     //this.oEmpleado.Fingerprints.Remove(this.oEmpleado.Fingerprints.Where(huella => ((Huella)huella).dedo == tipoDedo).FirstOrDefault()); 
                 }
             }
@@ -67,6 +67,7 @@ namespace Presentacion
                 row++;
             }
         }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -87,6 +88,7 @@ namespace Presentacion
             this.lstEmpleados = new List<Logica.Empleado>();
             setBinding();
         }
+
         /// <summary>
         /// Agrega una huella al empleado
         /// </summary>
@@ -97,6 +99,7 @@ namespace Presentacion
             if (txtCURP.Text.Length != 0)
                 getImage();
         }
+
         /// <summary>
         /// Guarda un empleado en la BD
         /// </summary>
@@ -111,6 +114,7 @@ namespace Presentacion
             MessageBox.Show("Guardado correctamente", "AVISO", MessageBoxButtons.OK, MessageBoxIcon.Information);
             //this.Close();
         }
+
         /// <summary>
         /// Valida el formulario
         /// </summary>
@@ -135,7 +139,7 @@ namespace Presentacion
                 int numHuellas = 0;
 
                 Sesion.getDedosRequeridos().ForEach(dedoRequerido => numHuellas += this.oEmpleado.Fingerprints.Where(huella => ((Huella)huella).dedo == dedoRequerido).Count());
-                if (numHuellas!=Sesion.getDedosRequeridos().Count)
+                if (numHuellas<Sesion.getDedosRequeridos().Count)
                 {
                     mensaje+="Huellas digitales requeridas:\r\n";
                     Sesion.getDedosRequeridos().ForEach(dedo => mensaje += dedo.ToString() + "\r\n"); 

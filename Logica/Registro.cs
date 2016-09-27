@@ -20,8 +20,8 @@ namespace Logica
                 this.abrirConexion();
                 MySqlCommand cmd = new MySqlCommand("INSERT INTO registro (idEmpleado,fechaRegistro) VALUES (@idEmpleado, @fechaRegistro)", this.connection);
                 cmd.Parameters.AddWithValue("@idEmpleado", this.empleado.IdEmpleado);
-                
-                cmd.Parameters.AddWithValue("@fechaRegistro", DateTime.Now);
+                this.fechaRegistro = DateTime.Now;
+                cmd.Parameters.AddWithValue("@fechaRegistro", fechaRegistro);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception e)

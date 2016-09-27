@@ -19,10 +19,10 @@ namespace Presentacion
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new MDIPrincipal());
+            Application.Run(new MDIPrincipal());
            // getVoces();
             //savefile();
-            subeArchivo();
+            //subeArchivo();
         }
 
         private static void getVoces()
